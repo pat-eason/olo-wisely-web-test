@@ -1,4 +1,4 @@
-FROM node:erbium-alpine
+FROM node:gallium-alpine
 ARG BUILD_ENV=development
 
 WORKDIR /app

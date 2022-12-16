@@ -1,27 +1,31 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Reservations from '../views/Reservations.vue'
+
+import {
+  ROUTE_NAME_INVENTORY,
+  ROUTE_NAME_RESERVATIONS
+} from '@/router/constants'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    redirect: 'reservations',
+    redirect: ROUTE_NAME_RESERVATIONS
   },
   {
     path: '/reservations',
-    name: 'Reservations',
-    component: Reservations
+    name: ROUTE_NAME_RESERVATIONS,
+    component: () =>
+      import(
+        /* webpackChunkName: "reservations" */ '../views/ReservationsView.vue'
+      )
   },
   {
     path: '/inventory',
-    name: 'Inventory',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    name: ROUTE_NAME_INVENTORY,
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Inventory.vue')
+      import(/* webpackChunkName: "inventory" */ '../views/InventoryView.vue')
   }
 ]
 

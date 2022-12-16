@@ -1,12 +1,19 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/reservations">Reservations</router-link> |
-      <router-link to="/inventory">Inventory</router-link>
-    </div>
+  <CoreLayout>
     <router-view />
-  </div>
+  </CoreLayout>
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+import CoreLayout from '@/components/layout/CoreLayout.vue'
+
+export default Vue.extend({
+  components: {
+    CoreLayout
+  }
+})
+</script>
 
 <style lang="scss">
 #app {
