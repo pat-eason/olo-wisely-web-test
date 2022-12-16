@@ -1,39 +1,31 @@
 <template>
   <CoreLayout>
-    <router-view />
+    <router-view v-if="!apiIsLoading" />
   </CoreLayout>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
 import CoreLayout from '@/components/layout/CoreLayout.vue'
+import { actionTypes } from '@/store/actions'
 
 export default Vue.extend({
   components: {
     CoreLayout
+  },
+  computed: {
+    apiIsLoading(): boolean {
+      return this.$store.state.currentRestaurant.isLoading
+    }
+  },
+  async mounted(): Promise<void> {
+    await this.initialHydration()
+  },
+  methods: {
+    async initialHydration(): Promise<void> {
+      await this.$store.dispatch(actionTypes.getCurrentRestaurant)
+    }
   }
 })
 </script>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>

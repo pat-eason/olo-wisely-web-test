@@ -10,6 +10,7 @@ import './assets/styles/tailwind.css'
 
 import App from './App.vue'
 import router from './router'
+import { store } from './store'
 
 library.add(faCalendarCheck, faCubesStacked)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -18,5 +19,6 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
