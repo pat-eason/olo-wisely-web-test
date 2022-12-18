@@ -13,9 +13,7 @@ export const createRestaurant = async (name: string, address: string): Promise<R
     return existingRecord;
   }
 
-  const newRecord = RestaurantEntity.build({ address, name });
-  await newRecord.save();
-  return newRecord;
+  return RestaurantEntity.create({ address, name });
 }
 
 /**
