@@ -9,6 +9,7 @@ export interface ApiTransactionState<T = never> {
 }
 
 export interface StoreState {
+  createInventory: ApiTransactionState<void>
   createReservation: ApiTransactionState<void>
   currentRestaurant: ApiTransactionState<RestaurantEntity>
   inventory: ApiTransactionState<InventoryEntity[]>
@@ -24,6 +25,7 @@ const generateDefaultTransactionState = <T>(
 })
 
 export const defaultState: StoreState = {
+  createInventory: generateDefaultTransactionState(),
   createReservation: generateDefaultTransactionState(),
   currentRestaurant: generateDefaultTransactionState(),
   inventory: generateDefaultTransactionState([]),

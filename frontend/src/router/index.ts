@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
 import {
+  ROUTE_NAME_CREATE_INVENTORY,
   ROUTE_NAME_CREATE_RESERVATION,
   ROUTE_NAME_INVENTORY,
   ROUTE_NAME_RESERVATIONS
@@ -35,6 +36,14 @@ const routes: Array<RouteConfig> = [
     name: ROUTE_NAME_INVENTORY,
     component: () =>
       import(/* webpackChunkName: "inventory" */ '../views/InventoryView.vue')
+  },
+  {
+    path: '/inventory/create',
+    name: ROUTE_NAME_CREATE_INVENTORY,
+    component: () =>
+      import(
+        /* webpackChunkName: "inventory" */ '../views/CreateInventoryView.vue'
+      )
   }
 ]
 

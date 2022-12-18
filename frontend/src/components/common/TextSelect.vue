@@ -14,7 +14,7 @@
     >
       <option
         v-for="(item, i) in items"
-        :key="`select-item_${item}`"
+        :key="`select-item_${key}_${i ?? item}`"
         :selected="item === model"
         :value="item"
       >
@@ -28,9 +28,15 @@
 import Vue, { PropType } from 'vue'
 
 export default Vue.extend({
+  data: () => ({
+    key: Math.random().toString(36).slice(2)
+  }),
   props: {
     disabled: { type: Boolean, default: false },
-    items: { type: Object as PropType<Record<string, string>>, required: true },
+    items: {
+      type: Object as PropType<Record<string, string | number>>,
+      required: true
+    },
     label: { type: String, default: '' },
     value: { type: String, default: '' }
   },

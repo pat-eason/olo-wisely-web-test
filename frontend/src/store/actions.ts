@@ -1,11 +1,16 @@
-import { getCurrentRestaurant } from '@/api/requests/get-current-restaurant'
-import { getReservationsForRestaurant } from '@/api/requests/get-reservations'
-import { createReservation } from '@/api/requests/create-reservation'
+import {
+  createInventory,
+  createReservation,
+  getCurrentRestaurant,
+  getInventoryForRestaurant,
+  getReservationsForRestaurant
+} from '@/api/requests'
 import { mutationTypes } from '@/store/mutations'
 import { CreateReservationModel } from '@/types/CreateReservationModel'
-import { getInventoryForRestaurant } from '@/api/requests/get-inventory'
+import { CreateInventoryModel } from '@/types/CreateInventoryModel'
 
 export const actionTypes = {
+  createInventory: 'CREATE_INVENTORY',
   createReservation: 'CREATE_RESERVATION',
   getCurrentRestaurant: 'GET_CURRENT_RESTAURANT',
   getInventory: 'GET_INVENTORY',
@@ -29,6 +34,19 @@ const executeApiTransaction = async (
 }
 
 export const actions = {
+  async [actionTypes.createInventory](
+    { commit },
+    payload: CreateInventoryModel
+  ): Promise<void> {
+    await executeApiTransaction(
+      commit,
+      mutationTypes.setCreateInventoryLoading,
+      mutationTypes.setCreateInventoryError,
+      async () => {
+        await createInventory(payload)
+      }
+    )
+  },
   async [actionTypes.createReservation](
     { commit },
     payload: CreateReservationModel

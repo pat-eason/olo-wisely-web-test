@@ -1,50 +1,39 @@
 <template>
   <form @submit="handleSubmit">
     <div class="grid md:grid-cols-3 gap-4">
-      <div>
-        <TextInput
-          v-model="model.name"
-          :disabled="disabled"
-          label="Patron Name"
-          placeholder="John Smith"
-        />
-      </div>
-      <div>
-        <TextInput
-          v-model="model.email"
-          :disabled="disabled"
-          label="Patron Email"
-          placeholder="john@smith.com"
-          type="email"
-        />
-      </div>
-      <div>
-        <TextInput
-          v-model="model.partySize"
-          :disabled="disabled"
-          label="Party Size"
-          placeholder="1"
-          type="number"
-        />
-      </div>
+      <TextInput
+        v-model="model.name"
+        :disabled="disabled"
+        label="Patron Name"
+        placeholder="John Smith"
+      />
+      <TextInput
+        v-model="model.email"
+        :disabled="disabled"
+        label="Patron Email"
+        placeholder="john@smith.com"
+        type="email"
+      />
+      <TextInput
+        v-model="model.partySize"
+        :disabled="disabled"
+        label="Party Size"
+        placeholder="1"
+        type="number"
+      />
     </div>
 
     <div class="grid md:grid-cols-2 gap-4">
-      <div>
-        <TextSelect
-          v-model="model.reservationDate"
-          :items="selectDates"
-          label="Date"
-        />
-      </div>
-
-      <div>
-        <TextSelect
-          v-model="model.reservationTime"
-          :items="selectTimes"
-          label="Time"
-        />
-      </div>
+      <TextSelect
+        v-model="model.reservationDate"
+        :items="selectDates"
+        label="Date"
+      />
+      <TextSelect
+        v-model="model.reservationTime"
+        :items="selectTimes"
+        label="Time"
+      />
     </div>
 
     <div class="text-right">
@@ -60,6 +49,7 @@ import Vue from 'vue'
 
 import LabelButton from '@/components/common/LabelButton.vue'
 import TextInput from '@/components/common/TextInput.vue'
+import { appConstants } from '@/constants/app.constants'
 import { CreateReservationModel } from '@/types/CreateReservationModel'
 import { formatDate, formatDateWithWeekday } from '@/utils/date-utils'
 import TextSelect from '@/components/common/TextSelect.vue'
@@ -67,9 +57,6 @@ import TextSelect from '@/components/common/TextSelect.vue'
 interface CreateReservationFormState {
   model: CreateReservationModel
 }
-
-const forwardReservationDates = 10
-const reservationTimeSlot = 15
 
 export default Vue.extend({
   components: { TextSelect, LabelButton, TextInput },
@@ -82,7 +69,7 @@ export default Vue.extend({
       const now = new Date()
       const output: Record<string, string> = {}
       output[formatDateWithWeekday(now)] = formatDate(now)
-      for (let i = 0; i < forwardReservationDates; i++) {
+      for (let i = 0; i < appConstants.forwardReservationDates; i++) {
         now.setDate(now.getDate() + 1)
         output[formatDateWithWeekday(now)] = formatDate(now)
       }
@@ -100,7 +87,10 @@ export default Vue.extend({
         }
 
         for (let j = 0; j < 4; j++) {
-          const minute = String(j * reservationTimeSlot).padStart(2, '0')
+          const minute = String(j * appConstants.reservationTimeSlot).padStart(
+            2,
+            '0'
+          )
           output[
             `${hour}:${minute}${meridiem}`
           ] = `${hour}:${minute}${meridiem}`

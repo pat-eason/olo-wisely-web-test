@@ -1,0 +1,133 @@
+<template>
+  <form @submit="handleSubmit">
+    <div class="grid md:grid-cols-3 gap-4">
+      <TextInput
+        v-model="model.label"
+        label="Inventory Label"
+        placeholder="Outdoor Terrace zone 1"
+      />
+      <TextInput
+        v-model="model.availableSlots"
+        label="Available Reservations"
+        placeholder="1"
+      />
+      <TextInput
+        v-model="model.maxPartySize"
+        label="Max Party Size"
+        placeholder="1"
+      />
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <TextSelect
+        v-model="model.startTime"
+        :items="startTimes"
+        label="Start Time"
+        @change="handleStartTimeChange"
+      />
+      <TextSelect
+        :key="`input-endtime_${renderKey}`"
+        v-model="model.endTime"
+        :items="endTimes"
+        label="End Time"
+      />
+    </div>
+
+    <div class="text-right">
+      <LabelButton :disabled="disabled" color="emerald" type="submit">
+        Create Inventory
+      </LabelButton>
+    </div>
+  </form>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+
+import LabelButton from '@/components/common/LabelButton.vue'
+import TextInput from '@/components/common/TextInput.vue'
+import TextSelect from '@/components/common/TextSelect.vue'
+import { appConstants } from '@/constants/app.constants'
+import { CreateInventoryModel } from '@/types/CreateInventoryModel'
+
+interface CreateInventoryFormState {
+  model: CreateInventoryModel
+  renderKey: number
+}
+
+export default Vue.extend({
+  components: { TextSelect, LabelButton, TextInput },
+  props: {
+    currentRestaurantId: { type: Number, required: true },
+    disabled: { type: Boolean, default: false }
+  },
+  computed: {
+    startTimes(): Record<string, number> {
+      const output: Record<string, number> = {}
+
+      for (let i = 0; i < 24; i++) {
+        const hour = i === 0 ? 12 : i
+        let meridiem = 'am'
+        if (hour >= 12 && i > 0) {
+          meridiem = 'pm'
+        }
+
+        for (let j = 0; j < 4; j++) {
+          const minute = String(j * appConstants.reservationTimeSlot).padStart(
+            2,
+            '0'
+          )
+          output[
+            `${meridiem === 'pm' ? hour - 12 : hour}:${minute}${meridiem}`
+          ] = Number.parseInt(`${hour}${minute}`)
+        }
+      }
+
+      return output
+    },
+    endTimes(): Record<string, number> {
+      if (!this.model.startTime) {
+        return this.startTimes
+      }
+      const output = this.startTimes
+      for (const record in output) {
+        console.log(record, output[record], this.model.startTime)
+        if (this.startTimes[record] < this.model.startTime) {
+          delete output[record]
+        }
+      }
+
+      console.log(output)
+      return output
+    }
+  },
+  data(): CreateInventoryFormState {
+    return {
+      model: {
+        label: '',
+        startTime: 0,
+        endTime: 0,
+        availableSlots: 1,
+        maxPartySize: 1,
+        restaurantId: this.currentRestaurantId
+      },
+      renderKey: new Date().getMilliseconds()
+    }
+  },
+  methods: {
+    handleStartTimeChange(): void {
+      if (
+        this.model.endTime &&
+        !Object.values(this.endTimes).includes(this.model.endTime)
+      ) {
+        this.model.endTime = 0
+      }
+      this.renderKey = new Date().getMilliseconds()
+    },
+    handleSubmit(e: Event): void {
+      e.preventDefault()
+      this.$emit('submit', this.model)
+    }
+  }
+})
+</script>

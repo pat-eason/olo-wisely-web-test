@@ -1,11 +1,11 @@
 <template>
-  <div id="view--create-reservation">
-    <PageTitle> Create Reservation </PageTitle>
+  <div id="view--create-inventory">
+    <PageTitle> Create Inventory </PageTitle>
 
-    <CreateReservationForm
+    <CreateInventoryForm
       :currentRestaurantId="currentRestaurant.id"
       :disabled="apiIsLoading"
-      @submit="createReservation"
+      @submit="createInventory"
     />
   </div>
 </template>
@@ -14,14 +14,14 @@
 import Vue from 'vue'
 
 import { RestaurantEntity } from '@/api/types/RestaurantEntity'
-import CreateReservationForm from '@/components/CreateReservationForm.vue'
 import PageTitle from '@/components/common/PageTitle.vue'
-import { ROUTE_NAME_RESERVATIONS } from '@/router/constants'
+import CreateInventoryForm from '@/components/CreateInventoryForm.vue'
+import { ROUTE_NAME_INVENTORY } from '@/router/constants'
 import { actionTypes } from '@/store/actions'
-import { CreateReservationModel } from '@/types/CreateReservationModel'
+import { CreateInventoryModel } from '@/types/CreateInventoryModel'
 
 export default Vue.extend({
-  components: { PageTitle, CreateReservationForm },
+  components: { CreateInventoryForm, PageTitle },
   computed: {
     apiIsLoading(): boolean {
       return this.$store.state.createReservation.isLoading
@@ -31,11 +31,11 @@ export default Vue.extend({
     }
   },
   methods: {
-    async createReservation(model: CreateReservationModel): Promise<void> {
-      await this.$store.dispatch(actionTypes.createReservation, model)
+    async createInventory(model: CreateInventoryModel): Promise<void> {
+      await this.$store.dispatch(actionTypes.createInventory, model)
       if (!this.$store.state.createReservation.error) {
         await this.$router.push({
-          name: ROUTE_NAME_RESERVATIONS,
+          name: ROUTE_NAME_INVENTORY,
           query: { createSuccess: '1' }
         })
       }
