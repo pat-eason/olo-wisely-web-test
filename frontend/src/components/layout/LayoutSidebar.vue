@@ -1,11 +1,13 @@
 <template>
   <section id="layout--sidebar" class="py-2 flex flex-col md:h-screen">
     <div class="flex-none text-center w-full">
-      <img
-        :src="require('@/assets/img/wisely-logo.png')"
-        alt="Wisely logo"
-        class="inline h-12 m-2"
-      />
+      <a href="https://www.getwisely.com/" target="_blank">
+        <img
+          :src="require('@/assets/img/wisely-logo.png')"
+          alt="Wisely logo"
+          class="inline h-12 m-2"
+        />
+      </a>
     </div>
     <div
       class="bg-sky-50 h-full w-full flex-1 flex flex-col overflow-hidden md:rounded-tr-xl md:rounded-br-xl"
