@@ -2,26 +2,20 @@
   <div id="view--reservations">
     <PageTitle :icon="titleIcon"> Reservations </PageTitle>
 
-    <div class="py-4">
-      <LoadingIndicator v-if="apiLoading" />
-      <div class="text-right">
-        <LabelButton color="emerald"> Create </LabelButton>
-      </div>
-      <template v-if="hasApiRecords">
-        <DataTable :config="datatableConfig" :items="apiRecords">
-          <template #item-email="{ item }">
-            <a :href="`mailto:${item.email}`" class="underline text-sky-600">
-              {{ item.email }}
-            </a>
-          </template>
-          <template #item-actions="{ item }">
-            <div class="text-right">
-              <LabelButton> Edit {{ item.id }} </LabelButton>
-            </div>
-          </template>
-        </DataTable>
-      </template>
+    <div v-if="showCreateSuccessNotice" class="py-2">
+      <AlertNotice> Reservation successfully created! </AlertNotice>
     </div>
+
+    <LoadingIndicator v-if="apiLoading" />
+    <div class="py-4 text-right">
+      <router-link
+        :to="{ name: createReservationRouteName }"
+        class="rounded-lg bg-emerald-500 px-4 py-3 text-white text-sm"
+      >
+        New Reservation
+      </router-link>
+    </div>
+    <ReservationsTable :reservations="apiRecords" />
   </div>
 </template>
 
@@ -29,20 +23,22 @@
 import Vue from 'vue'
 
 import { ReservationEntity } from '@/api/types/ReservationEntity'
-import LabelButton from '@/components/common/LabelButton.vue'
+import AlertNotice from '@/components/common/AlertNotice.vue'
 import LoadingIndicator from '@/components/common/LoadingIndicator.vue'
-import DataTable from '@/components/common/DataTable.vue'
-import { DatatableConfig } from '@/components/common/datatable/types/DatatableConfig'
 import PageTitle from '@/components/common/PageTitle.vue'
-import { ROUTE_ICON_RESERVATIONS } from '@/router/constants'
+import ReservationsTable from '@/components/ReservationsTable.vue'
+import {
+  ROUTE_NAME_CREATE_RESERVATION,
+  ROUTE_ICON_RESERVATIONS
+} from '@/router/constants'
 import { actionTypes } from '@/store/actions'
 
 export default Vue.extend({
   components: {
-    DataTable,
-    LabelButton,
+    AlertNotice,
     LoadingIndicator,
-    PageTitle
+    PageTitle,
+    ReservationsTable
   },
   computed: {
     apiLoading(): boolean {
@@ -54,44 +50,11 @@ export default Vue.extend({
     apiRecords(): ReservationEntity[] {
       return this.$store.state.reservations.data
     },
-    datatableConfig(): DatatableConfig {
-      return {
-        headers: [
-          {
-            key: 'id',
-            label: 'ID',
-            sortable: true
-          },
-          {
-            key: 'name',
-            label: 'Name',
-            searchable: true
-          },
-          {
-            key: 'email',
-            label: 'Email',
-            searchable: true
-          },
-          {
-            key: 'partySize',
-            label: 'Party Size',
-            searchable: true
-          },
-          {
-            key: 'date',
-            label: 'Date & Time',
-            searchable: true
-          },
-          {
-            key: 'actions',
-            label: 'Actions'
-          }
-        ],
-        searchable: true
-      }
+    createReservationRouteName(): string {
+      return ROUTE_NAME_CREATE_RESERVATION
     },
-    hasApiRecords(): boolean {
-      return this.apiRecords.length > 0
+    showCreateSuccessNotice(): boolean {
+      return !!this.$route.query['createSuccess']
     },
     titleIcon(): string {
       return ROUTE_ICON_RESERVATIONS

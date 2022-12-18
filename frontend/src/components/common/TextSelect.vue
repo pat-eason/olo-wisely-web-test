@@ -1,33 +1,37 @@
 <template>
-  <label class="text-field block my-2">
+  <label class="text--select block my-2">
     <span class="block text-gray-600 text-sm font-semibold mb-2">
       {{ label }}
     </span>
-    <input
+    <select
       v-model="model"
       :class="{
         'cursor-not-allowed': disabled
       }"
       :disabled="disabled"
-      :placeholder="placeholder"
-      :type="type"
-      class="h-10 shadow appearance-none border rounded w-full px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      class="h-10 shadow border rounded w-full pl-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
       @change="handleChange"
-    />
+    >
+      <option
+        v-for="(item, i) in items"
+        :key="`select-item_${item}`"
+        :selected="item === model"
+        :value="item"
+      >
+        {{ i ?? item }}
+      </option>
+    </select>
   </label>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-type inputType = 'email' | 'number' | 'tel' | 'text'
-
 export default Vue.extend({
   props: {
     disabled: { type: Boolean, default: false },
+    items: { type: Object as PropType<Record<string, string>>, required: true },
     label: { type: String, default: '' },
-    placeholder: { type: String, default: '' },
-    type: { type: String as PropType<inputType>, default: 'text' },
     value: { type: String, default: '' }
   },
   computed: {
@@ -47,3 +51,11 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style lang="scss">
+.text--select {
+  select {
+    text-overflow: ellipsis;
+  }
+}
+</style>

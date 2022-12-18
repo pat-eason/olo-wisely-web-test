@@ -3,6 +3,8 @@ import { RestaurantEntity } from '@/api/types/RestaurantEntity'
 import { ReservationEntity } from '@/api/types/ReservationEntity'
 
 export const mutationTypes = {
+  setCreateReservationError: 'SET_CREATE_RESERVATION_ERROR',
+  setCreateReservationLoading: 'SET_CREATE_RESERVATION_LOADING',
   setCurrentRestaurantLoading: 'SET_CURRENT_RESTAURANT_LOADING',
   setCurrentRestaurantError: 'SET_CURRENT_RESTAURANT_ERROR',
   setCurrentRestaurant: 'SET_CURRENT_RESTAURANT',
@@ -11,6 +13,18 @@ export const mutationTypes = {
   setReservations: 'SET_RESERVATIONS'
 }
 export const mutations = {
+  [mutationTypes.setCreateReservationError](
+    state: StoreState,
+    error: ApiTransactionState['error']
+  ) {
+    state.createReservation.error = error
+  },
+  [mutationTypes.setCreateReservationLoading](
+    state: StoreState,
+    isLoading: ApiTransactionState['isLoading']
+  ) {
+    state.createReservation.isLoading = isLoading
+  },
   [mutationTypes.setCurrentRestaurantLoading](
     state: StoreState,
     isLoading: ApiTransactionState['isLoading']

@@ -1,13 +1,29 @@
 import { getCurrentRestaurant } from '@/api/requests/get-current-restaurant'
-import { mutationTypes } from '@/store/mutations'
 import { getReservationsForRestaurant } from '@/api/requests/get-reservations'
+import { createReservation } from '@/api/requests/create-reservation'
+import { mutationTypes } from '@/store/mutations'
+import { CreateReservationModel } from '@/types/CreateReservationModel'
 
 export const actionTypes = {
+  createReservation: 'CREATE_RESERVATION',
   getCurrentRestaurant: 'GET_CURRENT_RESTAURANT',
   getReservations: 'GET_RESERVATIONS'
 }
 
 export const actions = {
+  async [actionTypes.createReservation](
+    { commit },
+    payload: CreateReservationModel
+  ): Promise<void> {
+    commit(mutationTypes.setCreateReservationLoading, true)
+    commit(mutationTypes.setCreateReservationError, null)
+    try {
+      await createReservation(payload)
+    } catch (err) {
+      commit(mutationTypes.setCreateReservationError, err)
+    }
+    commit(mutationTypes.setCreateReservationLoading, false)
+  },
   async [actionTypes.getCurrentRestaurant]({ commit }): Promise<void> {
     commit(mutationTypes.setCurrentRestaurantLoading, true)
     commit(mutationTypes.setCurrentRestaurantError, null)

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
 import {
+  ROUTE_NAME_CREATE_RESERVATION,
   ROUTE_NAME_INVENTORY,
   ROUTE_NAME_RESERVATIONS
 } from '@/router/constants'
@@ -19,6 +20,14 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(
         /* webpackChunkName: "reservations" */ '../views/ReservationsView.vue'
+      )
+  },
+  {
+    path: '/reservations/create',
+    name: ROUTE_NAME_CREATE_RESERVATION,
+    component: () =>
+      import(
+        /* webpackChunkName: "reservations" */ '../views/CreateReservationView.vue'
       )
   },
   {
