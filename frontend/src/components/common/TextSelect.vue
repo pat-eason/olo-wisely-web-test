@@ -12,6 +12,7 @@
       class="h-10 shadow border rounded w-full pl-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"
       @change="handleChange"
     >
+      <option :value="emptyState">-- Select an option --</option>
       <option
         v-for="(item, i) in items"
         :key="`select-item_${key}_${i ?? item}`"
@@ -33,12 +34,13 @@ export default Vue.extend({
   }),
   props: {
     disabled: { type: Boolean, default: false },
+    emptyState: { type: [String, Number], default: null },
     items: {
       type: Object as PropType<Record<string, string | number>>,
       required: true
     },
     label: { type: String, default: '' },
-    value: { type: String, default: '' }
+    value: { type: [String, Number], default: null }
   },
   computed: {
     model: {

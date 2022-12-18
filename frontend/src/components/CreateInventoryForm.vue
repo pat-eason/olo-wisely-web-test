@@ -10,23 +10,27 @@
         v-model="model.availableSlots"
         label="Available Reservations"
         placeholder="1"
+        type="number"
       />
       <TextInput
         v-model="model.maxPartySize"
         label="Max Party Size"
         placeholder="1"
+        type="number"
       />
     </div>
 
     <div class="grid md:grid-cols-2 gap-4">
       <TextSelect
         v-model="model.startTime"
+        :empty-state="0"
         :items="startTimes"
         label="Start Time"
         @change="handleStartTimeChange"
       />
       <TextSelect
         :key="`input-endtime_${renderKey}`"
+        :empty-state="0"
         v-model="model.endTime"
         :items="endTimes"
         label="End Time"
@@ -66,9 +70,9 @@ export default Vue.extend({
       const output: Record<string, number> = {}
 
       for (let i = 0; i < 24; i++) {
-        const hour = i === 0 ? 12 : i
+        const hours = i === 0 ? 12 : i
         let meridiem = 'am'
-        if (hour >= 12 && i > 0) {
+        if (hours >= 12 && i > 0) {
           meridiem = 'pm'
         }
 
@@ -77,9 +81,8 @@ export default Vue.extend({
             2,
             '0'
           )
-          output[
-            `${meridiem === 'pm' ? hour - 12 : hour}:${minute}${meridiem}`
-          ] = Number.parseInt(`${hour}${minute}`)
+          output[`${hours > 12 ? hours - 12 : hours}:${minute}${meridiem}`] =
+            Number.parseInt(`${hours}${minute}`)
         }
       }
 
@@ -91,13 +94,10 @@ export default Vue.extend({
       }
       const output = this.startTimes
       for (const record in output) {
-        console.log(record, output[record], this.model.startTime)
         if (this.startTimes[record] < this.model.startTime) {
           delete output[record]
         }
       }
-
-      console.log(output)
       return output
     }
   },

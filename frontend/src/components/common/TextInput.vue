@@ -9,6 +9,8 @@
         'cursor-not-allowed': disabled
       }"
       :disabled="disabled"
+      :max="max"
+      :min="min"
       :placeholder="placeholder"
       :type="type"
       class="h-10 shadow appearance-none border rounded w-full px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -26,9 +28,11 @@ export default Vue.extend({
   props: {
     disabled: { type: Boolean, default: false },
     label: { type: String, default: '' },
+    max: { type: Number },
+    min: { type: Number, default: 1 },
     placeholder: { type: String, default: '' },
     type: { type: String as PropType<inputType>, default: 'text' },
-    value: { type: String, default: '' }
+    value: { type: [String, Number], default: null }
   },
   computed: {
     model: {
