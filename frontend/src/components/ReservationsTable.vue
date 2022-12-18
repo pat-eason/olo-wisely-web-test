@@ -8,11 +8,6 @@
     <template #item-reservationDate="{ item }">
       {{ item.reservationDate }} @ {{ formatTimeString(item.reservationTime) }}
     </template>
-    <template #item-actions="{ item }">
-      <div class="text-right">
-        <LabelButton> Edit {{ item.id }} </LabelButton>
-      </div>
-    </template>
   </DataTable>
 </template>
 
@@ -20,15 +15,13 @@
 import Vue, { PropType } from 'vue'
 
 import DataTable from '@/components/common/DataTable.vue'
-import LabelButton from '@/components/common/LabelButton.vue'
 import { ReservationEntity } from '@/api/types/ReservationEntity'
 import { DatatableConfig } from '@/components/common/datatable/types/DatatableConfig'
 import { formatTime } from '@/utils/date-utils'
 
 export default Vue.extend({
   components: {
-    DataTable,
-    LabelButton
+    DataTable
   },
   props: {
     reservations: {
@@ -64,10 +57,6 @@ export default Vue.extend({
             key: 'reservationDate',
             label: 'Date & Time',
             searchable: true
-          },
-          {
-            key: 'actions',
-            label: 'Actions'
           }
         ],
         searchable: true

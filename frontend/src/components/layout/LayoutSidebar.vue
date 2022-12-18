@@ -1,5 +1,5 @@
 <template>
-  <section id="layout--sidebar" class="py-2 h-screen flex flex-col">
+  <section id="layout--sidebar" class="py-2 flex flex-col md:h-screen">
     <div class="flex-none text-center w-full">
       <img
         :src="require('@/assets/img/wisely-logo.png')"
@@ -8,7 +8,7 @@
       />
     </div>
     <div
-      class="bg-sky-50 h-full w-full rounded-tr-xl rounded-br-xl flex-1 flex flex-col overflow-hidden"
+      class="bg-sky-50 h-full w-full flex-1 flex flex-col overflow-hidden md:rounded-tr-xl md:rounded-br-xl"
     >
       <div class="flex-1 py-4">
         <LayoutNavigation />

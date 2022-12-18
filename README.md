@@ -20,5 +20,3 @@ yarn install
 cd ../frontend
 yarn install
 ```
-
-## Updated

@@ -25,6 +25,10 @@ export const formatDateWithWeekday = (date: Date): string => {
   }-${date.getDate()}`
 }
 
+/**
+ * Format utc/zulu time to friendly meridiem `hh:mma` format
+ * @param time
+ */
 export const formatTime = (time: number): string => {
   const timeString = String(time).padStart(4, '0')
   let hours = Number.parseInt(timeString.slice(0, 2))

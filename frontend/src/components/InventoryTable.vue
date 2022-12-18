@@ -4,11 +4,6 @@
       {{ formatTimeString(item.startTime) }}
       - {{ formatTimeString(item.endTime) }}
     </template>
-    <template #item-actions="{ item }">
-      <div class="text-right">
-        <LabelButton> Edit {{ item.id }} </LabelButton>
-      </div>
-    </template>
   </DataTable>
 </template>
 
@@ -17,14 +12,12 @@ import Vue, { PropType } from 'vue'
 
 import { InventoryEntity } from '@/api/types/InventoryEntity'
 import DataTable from '@/components/common/DataTable.vue'
-import LabelButton from '@/components/common/LabelButton.vue'
 import { DatatableConfig } from '@/components/common/datatable/types/DatatableConfig'
 import { formatTime } from '@/utils/date-utils'
 
 export default Vue.extend({
   components: {
-    DataTable,
-    LabelButton
+    DataTable
   },
   props: {
     inventory: {
@@ -61,10 +54,6 @@ export default Vue.extend({
             key: 'startTime',
             label: 'Timeframe',
             sortable: true
-          },
-          {
-            key: 'actions',
-            label: 'Actions'
           }
         ],
         searchable: true

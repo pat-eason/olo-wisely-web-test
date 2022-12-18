@@ -12,9 +12,11 @@
     <div class="py-4 text-right">
       <router-link
         :to="{ name: createInventoryRouteName }"
+        aria-label="Create new Inventory"
         class="rounded-lg bg-emerald-500 px-4 py-3 text-white text-sm"
       >
-        New Inventory
+        Inventory
+        <font-awesome-icon class="pl-1" icon="fas fa-plus" />
       </router-link>
     </div>
     <InventoryTable :inventory="apiRecords" />
