@@ -35,6 +35,7 @@ export const getInventoryInTimeRangeForPartySize = async (
   partySize: number,
   restaurantId: number
 ): Promise<InventoryEntity> => {
+  console.log('getInventoryInTimeRangeForPartySize', startTime, endTime, partySize, restaurantId)
   return InventoryEntity.findOne({
     where: {
       restaurantId,

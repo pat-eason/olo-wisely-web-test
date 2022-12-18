@@ -6,7 +6,7 @@
       </a>
     </template>
     <template #item-reservationDate="{ item }">
-      {{ formatDateString(item.reservationDate) }}
+      {{ item.reservationDate }} @ {{ formatTimeString(item.reservationTime) }}
     </template>
     <template #item-actions="{ item }">
       <div class="text-right">
@@ -23,7 +23,7 @@ import DataTable from '@/components/common/DataTable.vue'
 import LabelButton from '@/components/common/LabelButton.vue'
 import { ReservationEntity } from '@/api/types/ReservationEntity'
 import { DatatableConfig } from '@/components/common/datatable/types/DatatableConfig'
-import { formatDateWithWeekday, formatTime } from '@/utils/date-utils'
+import { formatTime } from '@/utils/date-utils'
 
 export default Vue.extend({
   components: {
@@ -75,9 +75,8 @@ export default Vue.extend({
     }
   },
   methods: {
-    formatDateString(date: string): string {
-      const d = new Date(date)
-      return `${formatDateWithWeekday(d)} @ ${formatTime(d)}`
+    formatTimeString(time: number): string {
+      return formatTime(time)
     }
   }
 })

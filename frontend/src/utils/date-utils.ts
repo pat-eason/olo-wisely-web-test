@@ -25,12 +25,14 @@ export const formatDateWithWeekday = (date: Date): string => {
   }-${date.getDate()}`
 }
 
-export const formatTime = (date: Date): string => {
-  let hour = date.getHours()
-  let meridian = 'am'
-  if (hour > 12) {
-    hour = hour - 12
-    meridian = 'pm'
+export const formatTime = (time: number): string => {
+  const timeString = String(time).padStart(4, '0')
+  let hours = Number.parseInt(timeString.slice(0, 2))
+  const minutes = timeString.slice(2, 4)
+  let meridiem = 'am'
+  if (hours >= 12) {
+    hours = hours > 12 ? hours - 12 : hours
+    meridiem = 'pm'
   }
-  return `${hour}:${date.getMinutes()}${meridian}`
+  return `${hours}:${minutes}${meridiem}`
 }

@@ -2,6 +2,8 @@
   <div id="view--create-reservation">
     <PageTitle> Create Reservation </PageTitle>
 
+    <ApiErrorContainer v-if="apiError" :error="apiError" />
+
     <CreateReservationForm
       :currentRestaurantId="currentRestaurant.id"
       :disabled="apiIsLoading"
@@ -14,6 +16,7 @@
 import Vue from 'vue'
 
 import { RestaurantEntity } from '@/api/types/RestaurantEntity'
+import ApiErrorContainer from '@/components/ApiErrorContainer.vue'
 import CreateReservationForm from '@/components/CreateReservationForm.vue'
 import PageTitle from '@/components/common/PageTitle.vue'
 import { ROUTE_NAME_RESERVATIONS } from '@/router/constants'
@@ -21,8 +24,15 @@ import { actionTypes } from '@/store/actions'
 import { CreateReservationModel } from '@/types/CreateReservationModel'
 
 export default Vue.extend({
-  components: { PageTitle, CreateReservationForm },
+  components: {
+    ApiErrorContainer,
+    CreateReservationForm,
+    PageTitle
+  },
   computed: {
+    apiError(): Record<string, string> {
+      return this.$store.state.createReservation.error
+    },
     apiIsLoading(): boolean {
       return this.$store.state.createReservation.isLoading
     },

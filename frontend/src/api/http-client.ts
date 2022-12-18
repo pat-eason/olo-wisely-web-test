@@ -1,6 +1,6 @@
 import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
-import ResponseEnvelope from '@/api/types/ResponseEnvelope'
+import { ResponseEnvelope } from '@/api/types/ResponseEnvelope'
 import { envConstants } from '@/constants/env.constants'
 
 type httpMethod = 'get' | 'post' | 'put' | 'delete'
@@ -29,9 +29,16 @@ export const httpClient = {
     if (config.params) {
       requestObject.params = config.params
     }
-    const response = await axiosInstance.request<ResponseEnvelope<T>>(
-      requestObject
-    )
-    return response.data
+    try {
+      const response = await axiosInstance.request<ResponseEnvelope<T>>(
+        requestObject
+      )
+      return response.data
+    } catch (err) {
+      if (err.response) {
+        return err.response.data
+      }
+      throw new Error(err)
+    }
   }
 }

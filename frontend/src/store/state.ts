@@ -4,7 +4,7 @@ import { InventoryEntity } from '@/api/types/InventoryEntity'
 
 export interface ApiTransactionState<T = never> {
   data?: T | null
-  error: Error | null
+  error: Record<string, string> | null
   isLoading: boolean
 }
 

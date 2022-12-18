@@ -15,7 +15,7 @@ export class ReservationEntity extends EntityBase<ReservationEntity> {
   partySize: number
 
   @Column
-  reservationDate: Date
+  reservationDate: string
 
   @Column
   reservationTime: number

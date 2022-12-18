@@ -2,6 +2,8 @@
   <div id="view--create-inventory">
     <PageTitle> Create Inventory </PageTitle>
 
+    <ApiErrorContainer v-if="apiError" :error="apiError" />
+
     <CreateInventoryForm
       :currentRestaurantId="currentRestaurant.id"
       :disabled="apiIsLoading"
@@ -19,12 +21,16 @@ import CreateInventoryForm from '@/components/CreateInventoryForm.vue'
 import { ROUTE_NAME_INVENTORY } from '@/router/constants'
 import { actionTypes } from '@/store/actions'
 import { CreateInventoryModel } from '@/types/CreateInventoryModel'
+import ApiErrorContainer from '@/components/ApiErrorContainer.vue'
 
 export default Vue.extend({
-  components: { CreateInventoryForm, PageTitle },
+  components: { ApiErrorContainer, CreateInventoryForm, PageTitle },
   computed: {
+    apiError(): Record<string, string> {
+      return this.$store.state.createInventory.error
+    },
     apiIsLoading(): boolean {
-      return this.$store.state.createReservation.isLoading
+      return this.$store.state.createInventory.isLoading
     },
     currentRestaurant(): RestaurantEntity {
       return this.$store.state.currentRestaurant.data
@@ -33,7 +39,7 @@ export default Vue.extend({
   methods: {
     async createInventory(model: CreateInventoryModel): Promise<void> {
       await this.$store.dispatch(actionTypes.createInventory, model)
-      if (!this.$store.state.createReservation.error) {
+      if (!this.$store.state.createInventory.error) {
         await this.$router.push({
           name: ROUTE_NAME_INVENTORY,
           query: { createSuccess: '1' }

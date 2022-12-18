@@ -22,71 +22,75 @@ export class ReservationsController extends ControllerBase {
 
   @Post('')
   private async create(req: Request<{}, {}, CreateReservationRequest>, res: Response) {
-    const reservationDate = new Date(req.body.reservationDateTime)
-    const reservationTime = Number.parseInt(
-      `${reservationDate.getHours()}${reservationDate.getMinutes()}`
-    )
+    try {
+      const model = req.body
 
-    // has this reservation already been created?
-    const existingReservation = await getExactReservation(
-      req.body.email,
-      req.body.reservationDateTime,
-      req.body.partySize,
-      req.body.restaurantId
-    )
-    if (existingReservation) {
-      return res
-        .status(409)
-        .send(
+      // has this reservation already been created?
+      const existingReservation = await getExactReservation(
+        model.email,
+        model.reservationDate,
+        model.reservationTime,
+        model.partySize,
+        model.restaurantId
+      )
+      if (existingReservation) {
+        return res.status(409).send(
           this.generateErrorResponse(
             {
-              error: `A reservation already exists for email [${req.body.email}] at [${reservationDate}] with party size [${req.body.partySize}]`,
+              error: `A reservation already exists for email [${model.email}] at [${model.reservationTime}] with party size [${model.partySize}]`,
             },
             'This customer already has a slot for this day, time, and party size'
           )
         )
-    }
+      }
 
-    // is there inventory for this party size and time frame?
-    const inventory = await getInventoryInTimeRangeForPartySize(
-      reservationTime,
-      reservationTime + 15,
-      req.body.partySize,
-      req.body.restaurantId
-    )
-    if (!inventory) {
-      return res
-        .status(404)
-        .send(
+      // is there inventory for this party size and time frame?
+      const inventory = await getInventoryInTimeRangeForPartySize(
+        model.reservationTime,
+        model.reservationTime + 15,
+        model.partySize,
+        model.restaurantId
+      )
+      if (!inventory) {
+        return res.status(404).send(
           this.generateErrorResponse(
             {
-              error: `There is not an Inventory record for party size [${req.body.partySize}] at time [${reservationTime}]`,
+              error: `There is not an Inventory record for party size [${model.partySize}] at time [${model.reservationTime}]`,
             },
             'There is not an Inventory record for that party size and time'
           )
         )
-    }
+      }
 
-    // are there slots available for this party size and time frame?
-    const reservationsForSlot = await getReservationsForInventory(
-      reservationDate,
-      inventory.partySize,
-      inventory.restaurantId
-    )
-    if (reservationsForSlot.length >= inventory.availableSlots) {
-      return res
-        .status(404)
-        .send(
+      // are there slots available for this party size and time frame?
+      const reservationsForSlot = await getReservationsForInventory(
+        model.reservationDate,
+        model.reservationTime,
+        inventory.partySize,
+        inventory.restaurantId
+      )
+      if (reservationsForSlot.length >= inventory.availableSlots) {
+        return res.status(404).send(
           this.generateErrorResponse(
             {
-              error: `There is no available Inventory slots remaining for date [${reservationDate}] with party size [${req.body.partySize}]`,
+              error: `There are no available Inventory slots remaining for date [${model.reservationDate}] with party size [${model.partySize}]`,
             },
             'There are no more slots on that day and party size at that time'
           )
         )
-    }
+      }
 
-    const newRecord = await createReservation(req.body)
-    return res.send(this.generateSuccessResponse(newRecord))
+      const newRecord = await createReservation(model)
+      return res.send(this.generateSuccessResponse(newRecord))
+    } catch (err) {
+      return res
+        .status(500)
+        .send(
+          this.generateErrorResponse(
+            { serverError: (err as Error).message },
+            (err as Error).message
+          )
+        )
+    }
   }
 }

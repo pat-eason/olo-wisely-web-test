@@ -43,7 +43,11 @@ export const actions = {
       mutationTypes.setCreateInventoryLoading,
       mutationTypes.setCreateInventoryError,
       async () => {
-        await createInventory(payload)
+        const response = await createInventory(payload)
+        if (response.error) {
+          commit(mutationTypes.setCreateInventoryError, response.error)
+          return
+        }
       }
     )
   },
@@ -56,7 +60,11 @@ export const actions = {
       mutationTypes.setCreateReservationLoading,
       mutationTypes.setCreateReservationError,
       async () => {
-        await createReservation(payload)
+        const response = await createReservation(payload)
+        if (response.error) {
+          commit(mutationTypes.setCreateReservationError, response.error)
+          return
+        }
       }
     )
   },
@@ -67,7 +75,11 @@ export const actions = {
       mutationTypes.setCurrentRestaurantError,
       async () => {
         const response = await getCurrentRestaurant()
-        commit(mutationTypes.setCurrentRestaurant, response)
+        if (response.error) {
+          commit(mutationTypes.setCurrentRestaurantError, response.error)
+          return
+        }
+        commit(mutationTypes.setCurrentRestaurant, response.data)
       }
     )
   },
@@ -80,7 +92,11 @@ export const actions = {
         const response = await getInventoryForRestaurant(
           state.currentRestaurant.data.id
         )
-        commit(mutationTypes.setInventory, response)
+        if (response.error) {
+          commit(mutationTypes.setInventoryError, response.error)
+          return
+        }
+        commit(mutationTypes.setInventory, response.data)
       }
     )
   },
@@ -93,7 +109,11 @@ export const actions = {
         const response = await getReservationsForRestaurant(
           state.currentRestaurant.data.id
         )
-        commit(mutationTypes.setReservations, response)
+        if (response.error) {
+          commit(mutationTypes.setReservationsError, response.error)
+          return
+        }
+        commit(mutationTypes.setReservations, response.data)
       }
     )
   }

@@ -21,38 +21,51 @@ export class InventoryController extends ControllerBase {
 
   @Post('')
   private async create(req: Request<{}, {}, CreateInventoryRequest>, res: Response) {
-    // creating inventory for current restaurant?
-    const currentRestaurant = await getCurrentRestaurant()
-    if (req.body.restaurantId !== currentRestaurant.id) {
+    const model = req.body
+
+    try {
+      // creating inventory for current restaurant?
+      const currentRestaurant = await getCurrentRestaurant()
+      if (model.restaurantId !== currentRestaurant.id) {
+        return res
+          .status(422)
+          .send(
+            this.generateErrorResponse(
+              { error: 'Mismatch Restaurant id' },
+              'Cannot create Inventory for differing Restaurant'
+            )
+          )
+      }
+
+      // does overlapping inventory already exist for this party size?
+      const overlapRecord = await getInventoryInTimeRangeForPartySize(
+        model.startTime,
+        model.endTime,
+        model.partySize,
+        model.restaurantId
+      )
+      if (overlapRecord) {
+        return res.status(422).send(
+          this.generateErrorResponse(
+            {
+              error: `Inventory record exists for party size [${overlapRecord.partySize}] with time range [${overlapRecord.startTime}] - [${overlapRecord.endTime}]`,
+            },
+            'There is already an Inventory record for that time and party size'
+          )
+        )
+      }
+
+      const newRecord = await createInventory(req.body)
+      return res.send(this.generateSuccessResponse(newRecord))
+    } catch (err) {
       return res
-        .status(422)
+        .status(500)
         .send(
           this.generateErrorResponse(
-            { error: 'Mismatch Restaurant id' },
-            'Cannot create Inventory for differing Restaurant'
+            { serverError: (err as Error).message },
+            (err as Error).message
           )
         )
     }
-
-    // does overlapping inventory already exist for this party size?
-    const overlapRecord = await getInventoryInTimeRangeForPartySize(
-      req.body.startTime,
-      req.body.endTime,
-      req.body.partySize,
-      req.body.restaurantId
-    )
-    if (overlapRecord) {
-      return res.status(422).send(
-        this.generateErrorResponse(
-          {
-            error: `Inventory record exists for party size [${overlapRecord.partySize}] with time range [${overlapRecord.startTime}] - [${overlapRecord.endTime}]`,
-          },
-          'There is already an Inventory record for that time and party size'
-        )
-      )
-    }
-
-    const newRecord = await createInventory(req.body)
-    return res.send(this.generateSuccessResponse(newRecord))
   }
 }

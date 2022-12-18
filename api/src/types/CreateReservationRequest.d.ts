@@ -2,6 +2,7 @@ export default interface CreateReservationRequest {
   email: string
   name: string
   partySize: number
-  reservationDateTime: string
+  reservationDate: string
+  reservationTime: number
   restaurantId: number
 }

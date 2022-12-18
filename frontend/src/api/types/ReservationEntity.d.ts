@@ -6,7 +6,7 @@ export interface ReservationEntity extends EntityBase {
   name: string
   partySize: number
   reservationDate: string
-  reservationTime: string
+  reservationTime: number
   restaurantId: number
   restaurant?: RestaurantEntity
 }

@@ -3,6 +3,6 @@ export interface CreateReservationModel {
   name: string
   partySize: string
   reservationDate: string
-  reservationTime: string
+  reservationTime: number
   restaurantId: number
 }

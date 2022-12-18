@@ -1,10 +1,5 @@
-import { Op } from 'sequelize'
-
 import { ReservationEntity } from '../models/entities'
 import CreateReservationRequest from '../types/CreateReservationRequest'
-
-const getTimeFromDate = (date: Date): number =>
-  Number.parseInt(`${date.getHours()}${date.getMinutes()}`)
 
 export const getReservationsForRestaurant = async (
   restaurantId: number
@@ -19,16 +14,12 @@ export const getReservationsForRestaurant = async (
 export const createReservation = async (
   model: CreateReservationRequest
 ): Promise<ReservationEntity> => {
-  const resDate = new Date(model.reservationDateTime)
-  return ReservationEntity.create({
-    ...model,
-    reservationDate: resDate.toISOString(),
-    reservationTime: getTimeFromDate(resDate),
-  })
+  return ReservationEntity.create({ ...model })
 }
 
 export const getReservationsForInventory = async (
-  reservationDate: Date,
+  reservationDate: string,
+  reservationTime: number,
   inventoryPartySize: number,
   restaurantId: number
 ): Promise<ReservationEntity[]> =>
@@ -36,33 +27,23 @@ export const getReservationsForInventory = async (
     where: {
       restaurantId,
       partySize: inventoryPartySize,
-      reservationDate: {
-        [Op.between]: [
-          new Date(reservationDate).setUTCHours(0, 0, 0, 0),
-          new Date(reservationDate).setUTCHours(23, 59, 59, 999),
-        ],
-      },
-      reservationTime: getTimeFromDate(reservationDate),
+      reservationDate,
+      reservationTime,
     },
   })
 
 export const getExactReservation = async (
   email: string,
-  date: string,
+  reservationDate: string,
+  reservationTime: number,
   partySize: number,
   restaurantId: number
 ): Promise<ReservationEntity> => {
-  const resDate = new Date(date)
   return ReservationEntity.findOne({
     where: {
       email,
-      reservationDate: {
-        [Op.between]: [
-          new Date(resDate).setUTCHours(0, 0, 0, 0),
-          new Date(resDate).setUTCHours(23, 59, 59, 999),
-        ],
-      },
-      reservationTime: getTimeFromDate(resDate),
+      reservationDate,
+      reservationTime,
       partySize,
       restaurantId,
     },

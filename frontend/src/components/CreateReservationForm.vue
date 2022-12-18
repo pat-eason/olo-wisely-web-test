@@ -75,14 +75,13 @@ export default Vue.extend({
       }
       return output
     },
-    selectTimes(): Record<string, string> {
-      const output: Record<string, string> = {}
+    selectTimes(): Record<string, number> {
+      const output: Record<string, number> = {}
 
       for (let i = 0; i < 24; i++) {
-        let hour = i === 0 ? 12 : i
+        const hours = i === 0 ? 12 : i
         let meridiem = 'am'
-        if (hour >= 12 && i > 0) {
-          hour = hour === 12 ? hour : hour - 12
+        if (hours >= 12 && i > 0) {
           meridiem = 'pm'
         }
 
@@ -91,9 +90,8 @@ export default Vue.extend({
             2,
             '0'
           )
-          output[
-            `${hour}:${minute}${meridiem}`
-          ] = `${hour}:${minute}${meridiem}`
+          output[`${hours > 12 ? hours - 12 : hours}:${minute}${meridiem}`] =
+            Number.parseInt(`${hours}${minute}`)
         }
       }
 
@@ -110,7 +108,7 @@ export default Vue.extend({
         reservationDate: `${now.getFullYear()}-${
           now.getMonth() + 1
         }-${now.getDate()}`,
-        reservationTime: '5:30pm',
+        reservationTime: 1730,
         restaurantId: this.currentRestaurantId
       }
     }

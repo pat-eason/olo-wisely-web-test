@@ -15,10 +15,11 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
+import { InventoryEntity } from '@/api/types/InventoryEntity'
 import DataTable from '@/components/common/DataTable.vue'
 import LabelButton from '@/components/common/LabelButton.vue'
 import { DatatableConfig } from '@/components/common/datatable/types/DatatableConfig'
-import { InventoryEntity } from '@/api/types/InventoryEntity'
+import { formatTime } from '@/utils/date-utils'
 
 export default Vue.extend({
   components: {
@@ -72,15 +73,7 @@ export default Vue.extend({
   },
   methods: {
     formatTimeString(time: number): string {
-      const timeString = String(time).padStart(4, '0')
-      let hours = Number.parseInt(timeString.slice(0, 2))
-      const minutes = timeString.slice(2, 4)
-      let meridiem = 'am'
-      if (hours >= 12) {
-        hours = hours > 12 ? hours - 12 : hours
-        meridiem = 'pm'
-      }
-      return `${hours}:${minutes}${meridiem}`
+      return formatTime(time)
     }
   }
 })

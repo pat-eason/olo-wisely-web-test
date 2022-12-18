@@ -1,5 +1,5 @@
-export default interface ResponseEnvelope<T> {
+export interface ResponseEnvelope<T = never> {
   data?: T
-  error?: Error
+  error?: Record<string, string>
   errorMessage?: string
 }
