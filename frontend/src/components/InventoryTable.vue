@@ -71,8 +71,8 @@ export default Vue.extend({
       let hours = Number.parseInt(timeString.slice(0, 2))
       const minutes = timeString.slice(2, 4)
       let meridiem = 'am'
-      if (hours > 12) {
-        hours = hours - 12
+      if (hours >= 12) {
+        hours = hours > 12 ? hours - 12 : hours
         meridiem = 'pm'
       }
       return `${hours}:${minutes}${meridiem}`
