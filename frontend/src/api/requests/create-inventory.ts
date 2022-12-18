@@ -11,7 +11,7 @@ export const createInventory = async (
     label: payload.label,
     startTime: payload.startTime,
     endTime: payload.endTime,
-    maxPartySize: payload.maxPartySize,
+    partySize: payload.partySize,
     availableSlots: payload.availableSlots,
     restaurantId: payload.restaurantId
   }

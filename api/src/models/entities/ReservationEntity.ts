@@ -18,7 +18,7 @@ export class ReservationEntity extends EntityBase<ReservationEntity> {
   reservationDate: Date
 
   @Column
-  reservationTime: string
+  reservationTime: number
 
   @ForeignKey(() => RestaurantEntity)
   @Column

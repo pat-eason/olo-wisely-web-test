@@ -13,7 +13,7 @@
         type="number"
       />
       <TextInput
-        v-model="model.maxPartySize"
+        v-model="model.partySize"
         label="Max Party Size"
         placeholder="1"
         type="number"
@@ -108,7 +108,7 @@ export default Vue.extend({
         startTime: 0,
         endTime: 0,
         availableSlots: 1,
-        maxPartySize: 1,
+        partySize: 1,
         restaurantId: this.currentRestaurantId
       },
       renderKey: new Date().getMilliseconds()

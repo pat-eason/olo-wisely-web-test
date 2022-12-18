@@ -2,7 +2,7 @@ export interface CreateInventoryModel {
   availableSlots: number
   endTime: number
   label?: string
-  maxPartySize: number
+  partySize: number
   restaurantId: number
   startTime: number
 }

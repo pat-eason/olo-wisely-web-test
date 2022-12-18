@@ -52,6 +52,11 @@ export default Vue.extend({
             sortable: true
           },
           {
+            key: 'partySize',
+            label: 'Party Size',
+            sortable: true
+          },
+          {
             key: 'startTime',
             label: 'Timeframe',
             sortable: true

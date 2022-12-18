@@ -10,7 +10,7 @@ export interface InventoryEntity extends EntityBase {
 
   availableSlots: number
 
-  maxPartySize: number
+  partySize: number
 
   restaurantId: number
 

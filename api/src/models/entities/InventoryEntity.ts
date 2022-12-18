@@ -18,7 +18,7 @@ export class InventoryEntity extends EntityBase<InventoryEntity> {
   availableSlots: number
 
   @Column
-  maxPartySize: number
+  partySize: number
 
   @ForeignKey(() => RestaurantEntity)
   @Column
