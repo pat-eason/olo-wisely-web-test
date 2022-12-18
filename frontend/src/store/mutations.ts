@@ -1,6 +1,7 @@
 import { ApiTransactionState, StoreState } from '@/store/state'
 import { RestaurantEntity } from '@/api/types/RestaurantEntity'
 import { ReservationEntity } from '@/api/types/ReservationEntity'
+import { InventoryEntity } from '@/api/types/InventoryEntity'
 
 export const mutationTypes = {
   setCreateReservationError: 'SET_CREATE_RESERVATION_ERROR',
@@ -8,10 +9,14 @@ export const mutationTypes = {
   setCurrentRestaurantLoading: 'SET_CURRENT_RESTAURANT_LOADING',
   setCurrentRestaurantError: 'SET_CURRENT_RESTAURANT_ERROR',
   setCurrentRestaurant: 'SET_CURRENT_RESTAURANT',
+  setInventoryLoading: 'SET_INVENTORY_LOADING',
+  setInventoryError: 'SET_INVENTORY_ERROR',
+  setInventory: 'SET_INVENTORY',
   setReservationsLoading: 'SET_RESERVATIONS_LOADING',
   setReservationsError: 'SET_RESERVATIONS_ERROR',
   setReservations: 'SET_RESERVATIONS'
 }
+
 export const mutations = {
   [mutationTypes.setCreateReservationError](
     state: StoreState,
@@ -42,6 +47,24 @@ export const mutations = {
     data: ApiTransactionState<RestaurantEntity>['data']
   ) {
     state.currentRestaurant.data = data
+  },
+  [mutationTypes.setInventoryLoading](
+    state: StoreState,
+    isLoading: ApiTransactionState['isLoading']
+  ) {
+    state.inventory.isLoading = isLoading
+  },
+  [mutationTypes.setInventoryError](
+    state: StoreState,
+    error: ApiTransactionState['error']
+  ) {
+    state.inventory.error = error
+  },
+  [mutationTypes.setInventory](
+    state: StoreState,
+    data: ApiTransactionState<InventoryEntity[]>['data']
+  ) {
+    state.inventory.data = data
   },
   [mutationTypes.setReservationsLoading](
     state: StoreState,

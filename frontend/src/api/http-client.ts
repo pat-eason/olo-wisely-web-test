@@ -11,18 +11,14 @@ interface HttpClientRequestConfig {
   url: string
 }
 
-class HttpClient {
-  private axiosInstance: AxiosInstance
+const axiosInstance: AxiosInstance = Axios.create({
+  baseURL: envConstants.apiUrlBase
+})
 
-  constructor() {
-    this.axiosInstance = Axios.create({
-      baseURL: envConstants.apiUrlBase
-    })
-  }
-
-  public async executeRequest<T>(
+export const httpClient = {
+  executeRequest: async <T>(
     config: HttpClientRequestConfig
-  ): Promise<ResponseEnvelope<T>> {
+  ): Promise<ResponseEnvelope<T>> => {
     const requestObject: AxiosRequestConfig = {
       method: config.method,
       url: config.url
@@ -33,12 +29,9 @@ class HttpClient {
     if (config.params) {
       requestObject.params = config.params
     }
-    const response = await this.axiosInstance.request<ResponseEnvelope<T>>(
+    const response = await axiosInstance.request<ResponseEnvelope<T>>(
       requestObject
     )
     return response.data
   }
 }
-
-const httpClient = new HttpClient()
-export { httpClient }

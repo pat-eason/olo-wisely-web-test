@@ -2,6 +2,6 @@ export interface CreateReservationRequest {
   email: string
   name: string
   partySize: number
-  reservationDateTime: Date
+  reservationDateTime: string
   restaurantId: number
 }

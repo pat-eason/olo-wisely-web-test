@@ -1,5 +1,6 @@
 import { RestaurantEntity } from '@/api/types/RestaurantEntity'
 import { ReservationEntity } from '@/api/types/ReservationEntity'
+import { InventoryEntity } from '@/api/types/InventoryEntity'
 
 export interface ApiTransactionState<T = never> {
   data?: T | null
@@ -10,24 +11,23 @@ export interface ApiTransactionState<T = never> {
 export interface StoreState {
   createReservation: ApiTransactionState<void>
   currentRestaurant: ApiTransactionState<RestaurantEntity>
+  inventory: ApiTransactionState<InventoryEntity[]>
   reservations: ApiTransactionState<ReservationEntity[]>
 }
 
+const generateDefaultTransactionState = <T>(
+  defaultValue: T = null
+): ApiTransactionState<T> => ({
+  data: defaultValue,
+  error: null,
+  isLoading: false
+})
+
 export const defaultState: StoreState = {
-  createReservation: {
-    error: null,
-    isLoading: false
-  },
-  currentRestaurant: {
-    data: null,
-    error: null,
-    isLoading: false
-  },
-  reservations: {
-    data: [],
-    error: null,
-    isLoading: false
-  }
+  createReservation: generateDefaultTransactionState(),
+  currentRestaurant: generateDefaultTransactionState(),
+  inventory: generateDefaultTransactionState([]),
+  reservations: generateDefaultTransactionState([])
 }
 
 export const state = { ...defaultState }
