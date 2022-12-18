@@ -2,9 +2,10 @@
   <transition name="notice--alert-fade">
     <div
       :class="{
-        'bg-blue-200 text-blue-700': type === 'info',
-        'bg-yellow-200 text-yellow-700': type === 'warning',
-        'bg-red-200 text-red-700': type === 'danger'
+        'bg-sky-100 text-sky-700': type === 'info',
+        'bg-amber-100 text-amber-700': type === 'warning',
+        'bg-rose-100 text-rose-700': type === 'danger',
+        'bg-emerald-100 text-emerald-700': type === 'success'
       }"
       class="notice--alert flex rounded-lg text-sm px-5 py-4 w-full"
     >
@@ -21,7 +22,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-type AlertType = 'info' | 'warning' | 'danger'
+type AlertType = 'info' | 'warning' | 'danger' | 'success'
 
 export default Vue.extend({
   props: {
@@ -34,10 +35,12 @@ export default Vue.extend({
     alertIcon(): string {
       switch (this.type) {
         case 'info':
-          return 'fa-clipboard'
+          return 'fas fa-clipboard'
         case 'warning':
         case 'danger':
-          return 'fa-exclamation-triangle'
+          return 'fas fa-exclamation-triangle'
+        case 'success':
+          return 'fas fa-check-circle'
         default:
           return ''
       }

@@ -3,7 +3,9 @@
     <PageTitle :icon="titleIcon"> Inventory </PageTitle>
 
     <div v-if="showCreateSuccessNotice" class="py-2">
-      <AlertNotice> Inventory successfully created! </AlertNotice>
+      <AlertNotice type="success">
+        Inventory successfully created!
+      </AlertNotice>
     </div>
 
     <LoadingIndicator v-if="apiLoading" />

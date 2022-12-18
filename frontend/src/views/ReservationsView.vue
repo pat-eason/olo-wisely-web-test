@@ -3,7 +3,9 @@
     <PageTitle :icon="titleIcon"> Reservations </PageTitle>
 
     <div v-if="showCreateSuccessNotice" class="py-2">
-      <AlertNotice> Reservation successfully created! </AlertNotice>
+      <AlertNotice type="success">
+        Reservation successfully created!
+      </AlertNotice>
     </div>
 
     <LoadingIndicator v-if="apiLoading" />
