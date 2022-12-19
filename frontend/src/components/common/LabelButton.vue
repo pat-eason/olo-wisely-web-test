@@ -23,7 +23,6 @@ export type ButtonType = 'button' | 'submit'
 export type ButtonColor = 'sky' | 'slate' | 'rose' | 'amber' | 'emerald'
 
 export default Vue.extend({
-  name: 'flare-button',
   props: {
     block: { type: Boolean, default: false },
     color: { type: String as PropType<ButtonColor>, default: 'sky' },

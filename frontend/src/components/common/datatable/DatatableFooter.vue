@@ -24,12 +24,18 @@
 
         <div>
           <div class="inline-block pr-2">
-            <span class="text-xs"> Per Page </span>
-            <!--<FlareSelect
+            <TextSelect
               v-model="perPageModel"
-              class="inline-block"
-              :items="[5, 10, 25, 50, 100]"
-            />!-->
+              :items="{
+                5: 5,
+                10: 10,
+                25: 25,
+                50: 50,
+                100: 100
+              }"
+              disable-default
+              label="Per Page"
+            />
           </div>
 
           <nav
@@ -68,8 +74,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import TextSelect from '@/components/common/TextSelect.vue'
 
 export default Vue.extend({
+  components: { TextSelect },
   props: {
     currentPage: { type: Number, required: true },
     pageFrom: { type: Number, required: true },
