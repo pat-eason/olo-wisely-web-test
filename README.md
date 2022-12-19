@@ -1,9 +1,11 @@
 # Wisely Web Test
 
+![Reservations view screenshot](readme-screenshot.png)
+
 ## Requirements
 
-* [Docker Desktop]()
-* Node 16+
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+* [Node 16+](https://nodejs.org/en/blog/release/v16.16.0/)
 
 ## Getting Started
 
