@@ -25,6 +25,24 @@ export class ReservationsController extends ControllerBase {
     try {
       const model = req.body
 
+      if (
+        !model.email ||
+        !model.reservationDate ||
+        !model.reservationTime ||
+        !model.partySize ||
+        !model.restaurantId
+      ) {
+        return res.status(422).send(
+          this.generateErrorResponse(
+            {
+              validation:
+                "Missing one or more required fields to create a reservation: 'email', 'reservationDate', 'reservationTime', 'partySize', 'restaurantId'",
+            },
+            'Missing one more more required fields'
+          )
+        )
+      }
+
       // has this reservation already been created?
       const existingReservation = await getExactReservation(
         model.email,

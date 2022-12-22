@@ -1,5 +1,9 @@
 <template>
   <form @submit="handleSubmit">
+    <AlertNotice v-if="formError" type="warning">
+      {{ formError }}
+    </AlertNotice>
+
     <div class="grid md:grid-cols-3 gap-4">
       <TextInput
         v-model="model.name"
@@ -53,13 +57,15 @@ import { appConstants } from '@/constants/app.constants'
 import { CreateReservationModel } from '@/types/CreateReservationModel'
 import { formatDate, formatDateWithWeekday } from '@/utils/date-utils'
 import TextSelect from '@/components/common/TextSelect.vue'
+import AlertNotice from '@/components/common/AlertNotice.vue'
 
 interface CreateReservationFormState {
+  formError: string
   model: CreateReservationModel
 }
 
 export default Vue.extend({
-  components: { TextSelect, LabelButton, TextInput },
+  components: { AlertNotice, TextSelect, LabelButton, TextInput },
   props: {
     currentRestaurantId: { type: Number, required: true },
     disabled: { type: Boolean, default: false }
@@ -101,6 +107,7 @@ export default Vue.extend({
   data(): CreateReservationFormState {
     const now = new Date()
     return {
+      formError: '',
       model: {
         email: '',
         name: '',
@@ -116,7 +123,24 @@ export default Vue.extend({
   methods: {
     handleSubmit(e: Event): void {
       e.preventDefault()
+      this.formError = ''
+      if (!this.validateModel()) {
+        this.formError = 'Please double check your Reservation details'
+        return
+      }
       this.$emit('submit', this.model)
+    },
+    validateModel(): boolean {
+      return !!(
+        this.model.name &&
+        this.model.email &&
+        this.model.partySize &&
+        Number.parseInt(this.model.partySize) > 0 &&
+        this.model.reservationDate &&
+        this.model.reservationTime &&
+        this.model.reservationTime > -1 &&
+        this.model.restaurantId
+      )
     }
   }
 })

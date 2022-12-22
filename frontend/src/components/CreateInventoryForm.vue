@@ -1,5 +1,9 @@
 <template>
   <form @submit="handleSubmit">
+    <AlertNotice v-if="formError" type="warning">
+      {{ formError }}
+    </AlertNotice>
+
     <div class="grid md:grid-cols-3 gap-4">
       <TextInput
         v-model="model.label"
@@ -53,14 +57,16 @@ import TextInput from '@/components/common/TextInput.vue'
 import TextSelect from '@/components/common/TextSelect.vue'
 import { appConstants } from '@/constants/app.constants'
 import { CreateInventoryModel } from '@/types/CreateInventoryModel'
+import AlertNotice from '@/components/common/AlertNotice.vue'
 
 interface CreateInventoryFormState {
+  formError: string
   model: CreateInventoryModel
   renderKey: number
 }
 
 export default Vue.extend({
-  components: { TextSelect, LabelButton, TextInput },
+  components: { AlertNotice, TextSelect, LabelButton, TextInput },
   props: {
     currentRestaurantId: { type: Number, required: true },
     disabled: { type: Boolean, default: false }
@@ -103,6 +109,7 @@ export default Vue.extend({
   },
   data(): CreateInventoryFormState {
     return {
+      formError: '',
       model: {
         label: '',
         startTime: 0,
@@ -126,7 +133,25 @@ export default Vue.extend({
     },
     handleSubmit(e: Event): void {
       e.preventDefault()
+      this.formError = ''
+      if (!this.validateModel()) {
+        this.formError = 'Please double check your Inventory details'
+        return
+      }
       this.$emit('submit', this.model)
+    },
+    validateModel(): boolean {
+      return !!(
+        this.model.startTime &&
+        this.model.startTime > -1 &&
+        this.model.endTime &&
+        this.model.endTime > -1 &&
+        this.model.availableSlots &&
+        this.model.availableSlots > 0 &&
+        this.model.partySize &&
+        this.model.partySize > 0 &&
+        this.model.restaurantId
+      )
     }
   }
 })

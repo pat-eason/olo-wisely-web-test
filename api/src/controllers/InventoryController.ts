@@ -21,9 +21,21 @@ export class InventoryController extends ControllerBase {
 
   @Post('')
   private async create(req: Request<{}, {}, CreateInventoryRequest>, res: Response) {
-    const model = req.body
-
     try {
+      const model = req.body
+
+      if (!model.startTime || !model.endTime || !model.partySize || !model.restaurantId) {
+        return res.status(422).send(
+          this.generateErrorResponse(
+            {
+              validation:
+                "Missing one or more required fields to create inventory: 'startTime', 'endTime', 'partySize', 'restaurantId'",
+            },
+            'Missing one more more required fields'
+          )
+        )
+      }
+
       // creating inventory for current restaurant?
       const currentRestaurant = await getCurrentRestaurant()
       if (model.restaurantId !== currentRestaurant.id) {
